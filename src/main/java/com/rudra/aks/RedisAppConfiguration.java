@@ -13,7 +13,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import com.rudra.aks.listener.UserMessageListener;
 
 @Configuration
-@ComponentScan(basePackages="com.rudra.aks")
+@ComponentScan(basePackages="com.rudra.aks.*")
 public class RedisAppConfiguration {
 
 	/*
@@ -50,7 +50,12 @@ public class RedisAppConfiguration {
 	public RedisMessageListenerContainer	listenerContainer() {
 		RedisMessageListenerContainer redisContainer = new RedisMessageListenerContainer();
 		redisContainer.setConnectionFactory(connectionFactory());
-		redisContainer.addMessageListener(messageListener(), new ChannelTopic("USER_CHANNEL"));
+		redisContainer.addMessageListener(messageListener(), topic());
 		return redisContainer;
+	}
+	
+	@Bean
+	public ChannelTopic	topic() {
+		return new ChannelTopic("channel: user");
 	}
 }
